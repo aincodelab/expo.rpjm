@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RPJMDesa Mata Iwoi 2000–2028</title>
+<style>
+  :root{
+    --text:#e8f5ef;
+    --muted:#8fb0a5;
+
+    --sec:#38bdf8;
+    --sec-2:#6366f1;
+
+    --visi-c1:#2fd08a;
+    --visi-c2:#29b6d8;
+
+    --panel-bg:linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.025));
+    --panel-border:rgba(255,255,255,.10);
+    --bg-1:#04120d;
+    --bg-2:#061a14;
+    --bg-3:#04100f;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{height:100%;background:var(--bg-1)}
+
+  body{
+    font-family:'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    color:var(--text);
+    height:100vh;
+    height:100dvh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    gap:clamp(8px,1.1vh,14px);
+    padding:clamp(10px,1.4vh,22px) clamp(14px,1.9vw,38px);
+    background:
+      radial-gradient(1200px 620px at 10% -14%, rgba(47,208,138,.20), transparent 62%),
+      radial-gradient(1000px 520px at 110% 114%, rgba(41,182,216,.16), transparent 60%),
+      linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 45%, var(--bg-3) 100%);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .flash{
+    position:fixed; inset:0; z-index:99; pointer-events:none; opacity:0;
+    background:radial-gradient(circle at 50% 0%, var(--sec), transparent 68%);
+  }
+  .flash.on{animation:flashPulse .7s ease-out}
+  @keyframes flashPulse{
+    0%{opacity:0}
+    22%{opacity:.18}
+    100%{opacity:0}
+  }
+
+  /* ================= HEADER ================= */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:20px;flex:none;
+    padding:clamp(8px,1.15vh,15px) clamp(14px,1.5vw,24px);
+    background:var(--panel-bg);
+    border:1px solid var(--panel-border);
+    border-radius:18px;
+    backdrop-filter:blur(8px);
+    position:relative;overflow:hidden;
+  }
+  .topbar::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:5px;
+    background:linear-gradient(180deg, var(--visi-c1), var(--visi-c2));
+  }
+
+  .brand{display:flex;align-items:center;gap:clamp(10px,1.1vw,18px);min-width:0}
+
+  .logo-wrap{
+    position:relative;
+    width:clamp(42px,5.2vh,64px);
+    height:clamp(42px,5.2vh,64px);
+    flex:none;
+    animation:logoIn 1s cubic-bezier(.22,.9,.3,1) both;
+  }
+  @keyframes logoIn{
+    from{opacity:0;transform:scale(.65) rotate(-10deg);filter:blur(6px)}
+    to{opacity:1;transform:none;filter:blur(0)}
+  }
+  .logo-svg,.logo-img{position:absolute;inset:0;width:100%;height:100%}
+  .logo-svg{z-index:1;filter:drop-shadow(0 0 12px rgba(47,208,138,.45))}
+  .logo-img{
+    z-index:2;object-fit:contain;
+    filter:drop-shadow(0 0 10px rgba(47,208,138,.35));
+    animation:logoGlow 4s ease-in-out 1s infinite;
+  }
+  @keyframes logoGlow{
+    0%,100%{filter:drop-shadow(0 0 10px rgba(47,208,138,.30))}
+    50%    {filter:drop-shadow(0 0 22px rgba(47,208,138,.65))}
+  }
+
+  .titles{min-width:0}
+  .titles h1{
+    font-size:clamp(15px,2.4vh,30px);
+    letter-spacing:.13em;font-weight:800;line-height:1.12;
+    background:linear-gradient(90deg,#ffffff, var(--visi-c1) 58%, var(--visi-c2));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    white-space:nowrap;
+  }
+  .titles p{
+    font-size:clamp(9px,1.15vh,13px);
+    color:var(--muted);letter-spacing:.06em;margin-top:3px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+
+  .topbar-right{display:flex;align-items:center;gap:clamp(10px,1.3vw,20px);flex:none}
+  .clockbox{text-align:right}
+  .clock{
+    font-size:clamp(16px,2.6vh,32px);font-weight:800;
+    font-variant-numeric:tabular-nums;letter-spacing:.05em;
+    color:#fff;line-height:1;
+    text-shadow:0 0 20px rgba(47,208,138,.45);
+  }
+  .date{font-size:clamp(9px,1.1vh,12px);color:var(--muted);letter-spacing:.05em;margin-top:4px}
+
+  .live{
+    display:flex;align-items:center;gap:7px;
+    font-size:clamp(9px,1.05vh,11.5px);letter-spacing:.16em;font-weight:700;
+    color:var(--visi-c1);
+    background:rgba(47,208,138,.10);
+    border:1px solid rgba(47,208,138,.32);
+    padding:7px 13px;border-radius:99px;
+  }
+  .live .dot{
+    width:8px;height:8px;border-radius:50%;background:var(--visi-c1);
+    animation:pulse 1.8s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(47,208,138,.65)}
+    70%{box-shadow:0 0 0 10px transparent}
+    100%{box-shadow:0 0 0 0 transparent}
+  }
+
+  .fs-btn{
+    width:clamp(34px,4.2vh,46px);height:clamp(34px,4.2vh,46px);
+    flex:none;border-radius:12px;display:grid;place-items:center;
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--panel-border);
+    color:var(--muted);cursor:pointer;transition:.25s ease;
+  }
+  .fs-btn:hover{
+    color:#fff;border-color:rgba(47,208,138,.55);
+    background:rgba(47,208,138,.15);
+  }
+  .fs-btn.active{
+    color:#05140f;background:var(--visi-c1);border-color:transparent;
+    box-shadow:0 0 18px rgba(47,208,138,.45);
+  }
+  .fs-btn svg{width:52%;height:52%;stroke:currentColor;fill:none;stroke-width:2.1;
+              stroke-linecap:round;stroke-linejoin:round}
+
+  /* ================= LAYOUT UTAMA ================= */
+  .main{
+    flex:1;min-height:0;
+    display:grid;
+    grid-template-columns:clamp(230px,23vw,330px) minmax(0,1fr);
+    gap:clamp(10px,1.4vw,22px);
+  }
+
+  /* ---------- KIRI: PROFIL ---------- */
+  .profile{
+    display:flex;flex-direction:column;
+    gap:clamp(5px,.75vh,9px);
+    padding:clamp(10px,1.4vh,18px);
+    background:var(--panel-bg);
+    border:1px solid var(--panel-border);
+    border-radius:18px;
+    backdrop-filter:blur(8px);
+    min-height:0;position:relative;
+    overflow-y:auto;overflow-x:hidden;
+  }
+  .profile::-webkit-scrollbar{width:0}
+  .profile::after{
+    content:"";position:absolute;right:-70px;bottom:-70px;
+    width:200px;height:200px;border-radius:50%;
+    background:radial-gradient(circle, var(--visi-c1) 0%, transparent 70%);
+    opacity:.12;pointer-events:none;
+  }
+
+  .person-block{
+    display:flex;flex-direction:column;
+    align-items:center;
+    gap:clamp(5px,.8vh,10px);
+    flex:none;
+    width:100%;
+  }
+
+  .profile-tag{
+    align-self:flex-start;
+    font-size:clamp(7.5px,.9vh,10.5px);
+    letter-spacing:.16em;font-weight:800;
+    color:#05140f;
+    background:linear-gradient(135deg, var(--visi-c1), var(--visi-c2));
+    padding:4px 10px;border-radius:99px;
+    animation:tagIn .9s cubic-bezier(.22,.9,.3,1) both;
+    white-space:nowrap;
+  }
+  .profile-tag.alt{
+    background:linear-gradient(135deg, #29b6d8, #6366f1);
+    color:#fff;
+  }
+  @keyframes tagIn{
+    from{opacity:0;transform:translateX(-12px)}
+    to{opacity:1;transform:none}
+  }
+
+  /* =====================================================
+     FOTO FRAME — SHARED KADES & PERANGKAT
+     ===================================================== */
+  .photo-frame{
+    position:relative;
+    flex:none;
+    width:min(100%, 200px);
+    aspect-ratio: 4 / 5;
+    margin:0 auto;
+    border-radius:16px;overflow:hidden;
+    border:1px solid rgba(47,208,138,.32);
+    background:linear-gradient(160deg,#0d2a20,#051712);
+    box-shadow:0 0 30px rgba(47,208,138,.18);
+    isolation:isolate;
+    will-change:transform;
+    animation:
+      frameIn 1s cubic-bezier(.22,.9,.3,1) both,
+      frameFloat 6s ease-in-out 1.1s infinite;
+  }
+  .photo-frame.people-frame{
+    border-color:rgba(41,182,216,.35);
+    box-shadow:0 0 30px rgba(41,182,216,.18);
+    animation-delay:.35s, 1.55s;
+  }
+  @keyframes frameIn{
+    from{
+      opacity:0;
+      transform:translateY(16px) scale(.93) rotate(-1.4deg);
+      filter:blur(8px) brightness(.8);
+    }
+    to{
+      opacity:1;
+      transform:none;
+      filter:blur(0) brightness(1);
+    }
+  }
+  @keyframes frameFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-5px)}
+  }
+
+  .photo-frame::after{
+    content:"";position:absolute;inset:-1px;border-radius:16px;
+    border:1.5px solid rgba(47,208,138,.55);
+    box-shadow:
+      0 0 18px rgba(47,208,138,.35),
+      inset 0 0 14px rgba(47,208,138,.12);
+    pointer-events:none;z-index:7;
+    animation:ringPulse 3.2s ease-in-out .9s infinite;
+  }
+  .photo-frame.people-frame::after{
+    border-color:rgba(41,182,216,.55);
+    box-shadow:
+      0 0 18px rgba(41,182,216,.35),
+      inset 0 0 14px rgba(41,182,216,.12);
+  }
+  @keyframes ringPulse{
+    0%,100%{
+      opacity:.55;
+      box-shadow:0 0 18px rgba(47,208,138,.35),
+                 inset 0 0 14px rgba(47,208,138,.12);
+    }
+    50%{
+      opacity:1;
+      box-shadow:0 0 34px rgba(47,208,138,.68),
+                 inset 0 0 24px rgba(47,208,138,.26);
+    }
+  }
+
+  .photo-bg{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    filter:blur(18px) saturate(1.2) brightness(.55);
+    transform:scale(1.2);
+    z-index:1;opacity:0;
+    transition:opacity .8s ease;
+  }
+  .photo-bg.loaded{opacity:.9}
+
+  .photo-fallback{
+    position:absolute;inset:0;z-index:1;
+    display:grid;place-items:center;
+    animation:fallbackIn .9s ease .1s both;
+  }
+  @keyframes fallbackIn{
+    from{opacity:0;transform:scale(1.05)}
+    to{opacity:1;transform:none}
+  }
+  .photo-fallback svg{width:100%;height:100%;display:block}
+
+  .photo-stack{
+    position:absolute;inset:0;
+    z-index:2;overflow:hidden;
+  }
+  .photo-layer{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:contain;
+    object-position:center;
+    opacity:0;
+    filter:drop-shadow(0 10px 22px rgba(0,0,0,.55));
+    transition:opacity 1.2s ease;
+    will-change:opacity, transform;
+    pointer-events:none;
+  }
+  .photo-layer.active{
+    opacity:1;
+    animation:photoEntry 1.6s cubic-bezier(.22,.9,.3,1);
+  }
+  @keyframes photoEntry{
+    0%   {transform:scale(1.14)}
+    55%  {transform:scale(.99)}
+    100% {transform:scale(1)}
+  }
+
+  .people-track{
+    position:absolute;inset:0;
+    z-index:2;
+    display:flex;
+    width:100%;height:100%;
+    transition:transform .8s cubic-bezier(.22,.9,.3,1);
+    will-change:transform;
+  }
+  .people-slide{
+    position:relative;
+    flex:0 0 100%;
+    width:100%;height:100%;
+  }
+  .people-slide img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:contain;
+    object-position:center;
+    filter:drop-shadow(0 10px 22px rgba(0,0,0,.55));
+    z-index:2;
+  }
+  .people-slide .photo-fallback{ z-index:1; }
+
+  .photo-shine{
+    position:absolute;inset:0;z-index:3;pointer-events:none;
+    background:linear-gradient(180deg, transparent 58%, rgba(0,0,0,.55) 100%);
+    overflow:hidden;
+  }
+  .photo-shine::before{
+    content:"";
+    position:absolute;top:-40%;left:-70%;
+    width:45%;height:190%;
+    background:linear-gradient(105deg,
+      transparent 0%,
+      rgba(255,255,255,.05) 35%,
+      rgba(255,255,255,.42) 50%,
+      rgba(255,255,255,.05) 65%,
+      transparent 100%);
+    transform:rotate(10deg);
+    mix-blend-mode:screen;
+    animation:shineSweep 5s ease-in-out .4s infinite;
+  }
+  @keyframes shineSweep{
+    0%   {left:-70%;opacity:0}
+    10%  {opacity:.95}
+    20%  {left:120%;opacity:.95}
+    30%  {opacity:0}
+    100% {left:120%;opacity:0}
+  }
+
+  .photo-badge{
+    position:absolute;left:8px;bottom:8px;z-index:5;
+    font-size:clamp(6.5px,.85vh,9.5px);
+    letter-spacing:.12em;font-weight:800;color:#fff;
+    background:rgba(0,0,0,.5);
+    border:1px solid rgba(47,208,138,.5);
+    padding:3px 8px;border-radius:99px;
+    backdrop-filter:blur(6px);
+    animation:badgeIn 1s cubic-bezier(.22,.9,.3,1) .6s both;
+  }
+  .people-frame .photo-badge{ border-color:rgba(41,182,216,.55); }
+  @keyframes badgeIn{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:none}
+  }
+
+  /* =====================================================
+     INFO KEPALA DESA
+     ===================================================== */
+  .profile-info{
+    flex:none;text-align:center;
+    display:flex;flex-direction:column;
+    align-items:center;
+    gap:clamp(3px,.5vh,7px);
+    width:100%;
+  }
+  .profile-info h2{
+    font-size:clamp(11px,1.55vh,16px);
+    font-weight:800;letter-spacing:.02em;line-height:1.22;
+    color:#fff;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    max-width:100%;
+  }
+  .kades-role{
+    font-size:clamp(8px,1.05vh,11.5px);
+    color:var(--visi-c1);font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;
+  }
+
+  .kades-meta{
+    width:100%;
+    display:flex;flex-direction:column;
+    align-items:center;
+    gap:clamp(2px,.4vh,5px);
+    margin-top:2px;
+    padding-top:clamp(4px,.7vh,8px);
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .meta-row{
+    display:flex;align-items:baseline;
+    justify-content:center;
+    gap:5px;flex-wrap:wrap;
+    font-size:clamp(7.5px,1vh,11px);
+    line-height:1.35;
+  }
+  .meta-label{
+    color:var(--muted);
+    font-weight:800;
+    font-size:.88em;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+  }
+  .meta-sep{color:rgba(255,255,255,.25);font-size:.85em}
+  .meta-val{color:#eafff7;font-weight:600}
+
+  /* =====================================================
+     INFO PERANGKAT — DIISI RAPI (TIDAK KOSONG)
+     ===================================================== */
+  .people-info{
+    flex:none;
+    width:100%;
+    min-height:172px;
+    display:flex;flex-direction:column;
+    align-items:center;
+    gap:clamp(3px,.5vh,6px);
+    transition:opacity .35s ease, transform .35s ease;
+    padding-top:2px;
+  }
+
+  /* Chip kategori */
+  .people-chip{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:clamp(6.5px,.82vh,9px);
+    letter-spacing:.14em;font-weight:800;
+    text-transform:uppercase;
+    padding:3px 10px;border-radius:99px;
+    background:rgba(47,208,138,.14);
+    border:1px solid rgba(47,208,138,.42);
+    color:#2fd08a;
+    white-space:nowrap;
+    transition:.35s ease;
+  }
+  .people-chip::before{
+    content:"";width:5px;height:5px;border-radius:50%;
+    background:currentColor;
+    box-shadow:0 0 6px currentColor;
+  }
+  .people-chip.lembaga{
+    background:rgba(56,189,248,.14);
+    border-color:rgba(56,189,248,.45);
+    color:#38bdf8;
+  }
+  .people-chip.tokoh{
+    background:rgba(240,192,96,.14);
+    border-color:rgba(240,192,96,.45);
+    color:#f0c060;
+  }
+
+  .people-name{
+    font-size:clamp(10px,1.35vh,14.5px);
+    font-weight:800;letter-spacing:.02em;
+    color:#fff;line-height:1.2;
+    text-align:center;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    max-width:100%;
+    width:100%;
+  }
+  .people-role{
+    font-size:clamp(8px,1.05vh,11.5px);
+    color:#38bdf8;font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    max-width:100%;
+    width:100%;
+    text-align:center;
+  }
+
+  /* Detail bidang/lembaga dalam pil */
+  .people-detail{
+    display:flex;align-items:center;justify-content:center;
+    gap:6px;
+    width:100%;
+    padding:clamp(4px,.6vh,6px) clamp(8px,1vw,12px);
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:9px;
+    font-size:clamp(7.5px,.98vh,10.5px);
+    color:#cfe9df;
+    text-align:center;
+    overflow:hidden;
+    transition:.35s ease;
+  }
+  .people-detail svg{
+    width:clamp(10px,1.35vh,14px);
+    height:clamp(10px,1.35vh,14px);
+    stroke:#38bdf8;fill:none;
+    stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+    flex-shrink:0;
+    opacity:.85;
+  }
+  .people-detail span{
+    overflow:hidden;text-overflow:ellipsis;
+    white-space:nowrap;
+    font-weight:600;
+  }
+
+  /* Navigasi + counter */
+  .people-footer{
+    display:flex;align-items:center;justify-content:center;
+    gap:12px;
+    width:100%;
+    margin-top:auto;
+    padding-top:clamp(4px,.7vh,8px);
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .people-nav-btn{
+    width:clamp(24px,3.2vh,32px);
+    height:clamp(24px,3.2vh,32px);
+    flex:none;
+    border-radius:8px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+    color:#b8d8cc;
+    font-family:inherit;
+    font-size:clamp(13px,1.8vh,18px);
+    font-weight:700;
+    cursor:pointer;
+    display:grid;place-items:center;
+    padding:0;line-height:1;
+    transition:.22s ease;
+  }
+  .people-nav-btn:hover{
+    background:rgba(56,189,248,.16);
+    border-color:rgba(56,189,248,.45);
+    color:#38bdf8;
+    transform:scale(1.08);
+  }
+  .people-nav-btn:active{ transform:scale(.94); }
+  .people-nav-btn:disabled{
+    opacity:.3;cursor:not-allowed;transform:none;
+  }
+
+  .people-counter{
+    display:flex;align-items:baseline;gap:3px;
+    font-size:clamp(8.5px,1.05vh,12px);
+    font-weight:800;
+    font-variant-numeric:tabular-nums;
+    color:#8fb0a5;
+    letter-spacing:.05em;
+  }
+  .counter-current{
+    color:#38bdf8;
+    font-size:1.28em;
+    text-shadow:0 0 10px rgba(56,189,248,.55);
+  }
+  .counter-sep{opacity:.4}
+  .counter-total{opacity:.65}
+
+  /* Divider antar blok */
+  .profile-divider{
+    flex:none;
+    height:1px;
+    width:100%;
+    background:linear-gradient(90deg, transparent, rgba(47,208,138,.35), transparent);
+    margin:2px 0;
+  }
+
+  /* ---------- KANAN: VISI + KONTEN ---------- */
+  .content{
+    display:flex;flex-direction:column;
+    gap:clamp(8px,1.1vh,14px);
+    min-height:0;min-width:0;
+  }
+
+  .visi-card{
+    flex:none;position:relative;overflow:hidden;
+    padding:clamp(13px,1.9vh,24px) clamp(16px,1.8vw,30px);
+    border-radius:18px;
+    background:
+      linear-gradient(135deg,
+        rgba(47,208,138,.14) 0%,
+        rgba(41,182,216,.08) 55%,
+        rgba(255,255,255,.02) 100%),
+      var(--panel-bg);
+    border:1px solid rgba(47,208,138,.32);
+    box-shadow:0 0 40px rgba(47,208,138,.10);
+  }
+  .visi-card::before{
+    content:"“";
+    position:absolute;left:clamp(6px,1vw,16px);top:clamp(-14px,-1vh,-4px);
+    font-family:Georgia,'Times New Roman',serif;
+    font-size:clamp(80px,15vh,180px);
+    line-height:1;
+    color:rgba(47,208,138,.16);
+    pointer-events:none;
+  }
+  .visi-card::after{
+    content:"";position:absolute;right:-80px;top:-80px;
+    width:220px;height:220px;border-radius:50%;
+    background:radial-gradient(circle, var(--visi-c2) 0%, transparent 70%);
+    opacity:.14;pointer-events:none;
+  }
+
+  .visi-head{
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:clamp(6px,1vh,12px);
+    position:relative;z-index:2;
+  }
+  .visi-ico{
+    width:clamp(24px,3.2vh,34px);height:clamp(24px,3.2vh,34px);
+    flex:none;border-radius:9px;display:grid;place-items:center;
+    background:rgba(47,208,138,.16);
+    border:1px solid rgba(47,208,138,.42);
+  }
+  .visi-ico svg{
+    width:60%;height:60%;stroke:var(--visi-c1);fill:none;
+    stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;
+  }
+  .visi-head h2{
+    font-size:clamp(10px,1.4vh,15px);
+    letter-spacing:.24em;font-weight:900;text-transform:uppercase;
+    color:var(--visi-c1);
+  }
+  .visi-head .line{
+    flex:1;height:1px;
+    background:linear-gradient(90deg, rgba(47,208,138,.55), transparent);
+  }
+
+  .visi-text{
+    position:relative;z-index:2;
+    font-size:clamp(13px,2.15vh,26px);
+    font-weight:600;line-height:1.5;letter-spacing:.01em;
+    color:#eafff7;
+  }
+  .visi-text .hl{
+    color:var(--visi-c1);font-weight:800;
+    text-shadow:0 0 24px rgba(47,208,138,.45);
+  }
+
+  .visi-foot{
+    position:relative;z-index:2;
+    margin-top:clamp(7px,1.1vh,14px);
+    display:flex;align-items:center;gap:10px;
+    font-size:clamp(8px,1.05vh,11.5px);
+    letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);font-weight:700;
+  }
+  .visi-foot::before,.visi-foot::after{
+    content:"";height:1px;flex:none;
+    width:clamp(20px,3vw,50px);
+    background:linear-gradient(90deg, transparent, var(--visi-c1), transparent);
+  }
+
+  .tabs{
+    display:flex;gap:clamp(6px,.8vw,12px);
+    position:relative;padding-bottom:6px;flex:none;
+  }
+  .tab{
+    flex:1;font-family:inherit;
+    font-size:clamp(11px,1.6vh,18px);
+    font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--panel-border);
+    border-radius:14px;
+    padding:clamp(6px,.95vh,12px) 8px;
+    cursor:pointer;position:relative;overflow:hidden;
+    transition:.35s cubic-bezier(.22,.9,.3,1);
+  }
+  .tab:hover{
+    color:#fff;
+    border-color:color-mix(in srgb, var(--sec) 40%, transparent);
+    background:color-mix(in srgb, var(--sec) 9%, transparent);
+  }
+  .tab.active{
+    color:#05140f;
+    background:linear-gradient(135deg, var(--sec), var(--sec-2));
+    border-color:transparent;
+    box-shadow:0 8px 24px color-mix(in srgb, var(--sec) 30%, transparent);
+    transform:translateY(-1px);
+  }
+  .tab-progress{
+    position:absolute;left:0;right:0;bottom:0;height:3px;
+    background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;
+  }
+  .tab-progress span{
+    display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg, var(--sec), var(--sec-2));
+    box-shadow:0 0 10px color-mix(in srgb, var(--sec) 75%, transparent);
+  }
+  @keyframes grow{from{width:0}to{width:100%}}
+
+  .panels{flex:1;min-height:0;position:relative}
+
+  .panel{
+    position:absolute;inset:0;
+    overflow-y:auto;overflow-x:hidden;
+    padding:clamp(12px,1.9vh,26px) clamp(14px,1.6vw,28px);
+    background:var(--panel-bg);
+    border:1px solid var(--panel-border);
+    border-radius:18px;
+    backdrop-filter:blur(8px);
+    opacity:0;transform:translateY(14px) scale(.995);
+    pointer-events:none;
+    transition:opacity .45s ease, transform .45s cubic-bezier(.22,.9,.3,1);
+  }
+  .panel.active{opacity:1;transform:none;pointer-events:auto}
+  .panel::-webkit-scrollbar{width:6px}
+  .panel::-webkit-scrollbar-thumb{
+    background:color-mix(in srgb, var(--sec) 40%, transparent);border-radius:9px;
+  }
+
+  .misi-item, .tujuan-card, .bidang-card{
+    opacity:0;
+    transform:translateY(22px) scale(.96);
+    transition:opacity .5s ease,
+               transform .55s cubic-bezier(.22,.9,.3,1),
+               background-color .3s ease,
+               border-color .3s ease,
+               box-shadow .3s ease;
+    pointer-events:none;
+    will-change:opacity, transform;
+  }
+  .misi-item.visible, .tujuan-card.visible, .bidang-card.visible{
+    opacity:1;transform:none;pointer-events:auto;
+  }
+
+  .misi-list{list-style:none;display:flex;flex-direction:column;gap:clamp(7px,1.15vh,15px)}
+  .misi-item{
+    display:flex;align-items:flex-start;gap:clamp(10px,1.1vw,16px);
+    padding:clamp(9px,1.3vh,16px) clamp(11px,1.2vw,18px);
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.07);
+    border-left:3px solid var(--sec);
+    border-radius:12px;
+  }
+  .misi-item.visible:hover{
+    background:color-mix(in srgb, var(--sec) 9%, transparent);
+    border-color:color-mix(in srgb, var(--sec) 30%, transparent);
+    transform:translateX(3px);
+  }
+  .misi-num{
+    flex:none;
+    width:clamp(28px,3.6vh,42px);height:clamp(28px,3.6vh,42px);
+    display:grid;place-items:center;border-radius:10px;
+    font-size:clamp(11px,1.5vh,17px);font-weight:900;color:#05140f;
+    background:linear-gradient(135deg, var(--sec), var(--sec-2));
+    box-shadow:0 0 16px color-mix(in srgb, var(--sec) 35%, transparent);
+  }
+  .misi-text{
+    font-size:clamp(10px,1.45vh,16px);
+    line-height:1.5;color:#d8efe6;padding-top:2px;
+  }
+
+  .tujuan-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:clamp(8px,1.1vw,16px);
+  }
+  .tujuan-card{
+    padding:clamp(11px,1.6vh,20px) clamp(12px,1.2vw,20px);
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:14px;position:relative;overflow:hidden;
+  }
+  .tujuan-card::before{
+    content:"";position:absolute;right:-40px;top:-40px;
+    width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle, var(--sec) 0%, transparent 70%);
+    opacity:.13;pointer-events:none;
+  }
+  .tujuan-card.visible:hover{
+    border-color:color-mix(in srgb, var(--sec) 38%, transparent);
+    transform:translateY(-3px);
+    box-shadow:0 12px 28px rgba(0,0,0,.35);
+  }
+  .t-ico{
+    display:grid;place-items:center;
+    width:clamp(28px,3.6vh,40px);height:clamp(28px,3.6vh,40px);
+    border-radius:11px;
+    background:color-mix(in srgb, var(--sec) 16%, transparent);
+    border:1px solid color-mix(in srgb, var(--sec) 38%, transparent);
+    margin-bottom:clamp(6px,.9vh,11px);
+  }
+  .t-ico svg{
+    width:60%;height:60%;stroke:var(--sec);fill:none;
+    stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  }
+  .tujuan-card h3{
+    font-size:clamp(10px,1.35vh,14.5px);
+    font-weight:800;letter-spacing:.04em;color:#fff;
+    margin-bottom:5px;line-height:1.3;
+  }
+  .tujuan-card p{
+    font-size:clamp(9px,1.15vh,12.5px);
+    line-height:1.5;color:#b3cfc5;
+  }
+
+  .sasaran-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(clamp(230px,26vw,320px),1fr));
+    gap:clamp(8px,1.1vw,16px);
+  }
+  .bidang-card{
+    --acc:#2fd08a;
+    position:relative;overflow:hidden;
+    padding:clamp(10px,1.4vh,17px) clamp(11px,1.1vw,17px);
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.08);
+    border-top:3px solid var(--acc);
+    border-radius:14px;
+  }
+  .bidang-card::before{
+    content:"";position:absolute;right:-50px;top:-50px;
+    width:130px;height:130px;border-radius:50%;
+    background:radial-gradient(circle, var(--acc) 0%, transparent 70%);
+    opacity:.12;pointer-events:none;
+  }
+  .bidang-card.visible:hover{
+    transform:translateY(-3px);
+    border-color:color-mix(in srgb, var(--acc) 40%, transparent);
+    border-top-color:var(--acc);
+    box-shadow:0 14px 30px rgba(0,0,0,.35);
+  }
+  .bidang-head{
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:clamp(7px,1.05vh,12px);
+    position:relative;z-index:2;
+  }
+  .bidang-ico{
+    width:clamp(30px,3.9vh,42px);height:clamp(30px,3.9vh,42px);
+    flex:none;border-radius:11px;display:grid;place-items:center;
+    background:color-mix(in srgb, var(--acc) 16%, transparent);
+    border:1px solid color-mix(in srgb, var(--acc) 42%, transparent);
+    box-shadow:0 0 16px color-mix(in srgb, var(--acc) 22%, transparent);
+  }
+  .bidang-ico svg{
+    width:58%;height:58%;stroke:var(--acc);fill:none;
+    stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  }
+  .bidang-meta{min-width:0}
+  .bidang-meta h3{
+    font-size:clamp(9.5px,1.3vh,14px);
+    font-weight:800;letter-spacing:.05em;color:#fff;
+    line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .bidang-sub{
+    display:block;
+    font-size:clamp(7.5px,.95vh,10.5px);
+    letter-spacing:.08em;text-transform:uppercase;
+    color:var(--acc);font-weight:700;margin-top:2px;
+  }
+  .bidang-list{
+    list-style:none;display:flex;flex-direction:column;
+    gap:clamp(6px,.9vh,11px);
+    position:relative;z-index:2;
+  }
+  .b-top{
+    display:flex;justify-content:space-between;align-items:baseline;
+    gap:10px;margin-bottom:4px;
+  }
+  .b-name{
+    font-size:clamp(8.5px,1.12vh,12.5px);
+    line-height:1.35;color:#cfe9df;
+  }
+  .b-val{
+    font-size:clamp(9px,1.2vh,13.5px);
+    font-weight:900;color:var(--acc);
+    font-variant-numeric:tabular-nums;white-space:nowrap;
+    text-shadow:0 0 12px color-mix(in srgb, var(--acc) 45%, transparent);
+  }
+  .b-track{
+    height:clamp(4px,.8vh,7px);
+    background:rgba(255,255,255,.07);
+    border-radius:99px;overflow:hidden;
+  }
+  .b-fill{
+    display:block;height:100%;width:0;border-radius:99px;
+    background:linear-gradient(90deg, var(--acc),
+              color-mix(in srgb, var(--acc) 55%, #ffffff));
+    box-shadow:0 0 10px color-mix(in srgb, var(--acc) 60%, transparent);
+    transition:width .95s cubic-bezier(.22,.9,.3,1);
+  }
+
+  .ticker{
+    position:relative;overflow:hidden;border-radius:12px;flex:none;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--panel-border);
+    padding:clamp(5px,.85vh,10px) 0;
+  }
+  .ticker::before,.ticker::after{
+    content:"";position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none;
+  }
+  .ticker::before{left:0;background:linear-gradient(90deg, var(--bg-1), transparent)}
+  .ticker::after{right:0;background:linear-gradient(270deg, var(--bg-1), transparent)}
+  .ticker-track{display:flex;width:max-content;animation:marquee 56s linear infinite}
+  .ticker-track span{
+    font-size:clamp(9px,1.05vh,12px);letter-spacing:.05em;
+    color:#b8d8cc;padding-right:60px;white-space:nowrap;
+  }
+  .ticker-track b{color:var(--visi-c1);font-weight:800}
+  @keyframes marquee{to{transform:translateX(-50%)}}
+
+  /* ================= RESPONSIF ================= */
+  @media (max-height: 950px){
+    .photo-frame{ width:min(100%, 175px); }
+    .people-info{ min-height:160px; }
+  }
+  @media (max-height: 850px){
+    .photo-frame{ width:min(100%, 155px); }
+    .people-info{ min-height:150px; }
+    .people-detail{ padding:3px 8px; }
+  }
+  @media (max-height: 750px){
+    .photo-frame{ width:min(100%, 135px); }
+    .people-info{ min-height:140px; }
+    .kades-meta{ display:none; }
+  }
+
+  @media (max-width: 1000px){
+    body{height:auto;min-height:100dvh;overflow-y:auto}
+    .main{grid-template-columns:1fr}
+    .profile{flex-direction:row;align-items:flex-start;gap:16px;flex-wrap:wrap}
+    .person-block{flex:1;min-width:160px}
+    .photo-frame{width:min(100%, 160px); max-width:none}
+    .profile-divider{display:none}
+    .panels{min-height:420px}
+    .panel{position:relative;inset:auto;display:none}
+    .panel.active{display:block}
+  }
+  @media (max-width: 620px){
+    .titles h1{white-space:normal;font-size:15px}
+    .titles p{white-space:normal}
+    .topbar{flex-wrap:wrap}
+    .tab{font-size:10px;letter-spacing:.06em}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .photo-frame, .photo-frame::after, .photo-shine::before,
+    .profile-tag, .photo-badge, .logo-wrap, .logo-img{
+      animation:none !important;
+    }
+    .photo-layer, .people-track{transition:none !important}
+  }
+</style>
+</head>
+<body>
+
+  <div class="flash" id="flash"></div>
+
+  <!-- ================= HEADER ================= -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-wrap">
+        <svg class="logo-svg" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <path class="ring" d="M24 3 42 11v12c0 10-8 18-18 21C14 41 6 33 6 23V11z"
+                stroke="#2fd08a" stroke-width="2.6" fill="rgba(255,255,255,.05)"/>
+          <path class="house" d="M15.5 26.5 24 19l8.5 7.5" stroke="#f0c060" stroke-width="2.6"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <path class="house" d="M19 25.5V34h10v-8.5" stroke="#f0c060" stroke-width="2.6"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <img class="logo-img" id="logoKonawe" src="logo-konawe.jpg"
+             alt="Logo Kabupaten Konawe" onerror="this.style.display='none'">
+      </div>
+
+      <div class="titles">
+        <h1>RPJM DESA MATA IWOI</h1>
+        <p>Kecamatan Amonggedo · Kabupaten Konawe · Sulawesi Tenggara · Periode 2000 – 2028</p>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="live"><span class="dot"></span>LIVE</div>
+      <div class="clockbox">
+        <div class="clock" id="clock">--:--:--</div>
+        <div class="date" id="date">Memuat tanggal…</div>
+      </div>
+      <button class="fs-btn" id="fsBtn" title="Layar Penuh (F)" aria-label="Layar Penuh">
+        <svg viewBox="0 0 24 24">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+          <path d="M16 3h3a2 2 0 0 1 2 2v3"/>
+          <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+          <path d="M8 21H5a2 2 0 0 1-2-2v-3"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main class="main">
+
+    <!-- ---------- KIRI: KADES + PERANGKAT ---------- -->
+    <aside class="profile">
+
+      <!-- === KEPALA DESA === -->
+      <div class="person-block">
+        <span class="profile-tag">KEPALA DESA</span>
+
+        <div class="photo-frame">
+          <img class="photo-bg" id="kadesPhotoBg" alt="" aria-hidden="true" src="">
+          <div class="photo-fallback" id="photoFallback">
+            <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <linearGradient id="pfGrad" x1="0" y1="0" x2=".6" y2="1">
+                  <stop offset="0" stop-color="#12402f"/>
+                  <stop offset="1" stop-color="#061a14"/>
+                </linearGradient>
+                <radialGradient id="pfGlow" cx="50%" cy="30%" r="58%">
+                  <stop offset="0" stop-color="#2fd08a" stop-opacity=".38"/>
+                  <stop offset="1" stop-color="#2fd08a" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <rect width="400" height="500" fill="url(#pfGrad)"/>
+              <rect width="400" height="500" fill="url(#pfGlow)"/>
+              <circle cx="200" cy="182" r="76" fill="#2a6350" opacity=".88"/>
+              <path d="M50 500c0-92 67-152 150-152s150 60 150 152z" fill="#2a6350" opacity=".88"/>
+            </svg>
+          </div>
+          <div class="photo-stack">
+            <img class="photo-layer" id="photoLayerA" alt="Foto Kepala Desa Mata Iwoi">
+            <img class="photo-layer" id="photoLayerB" alt="Foto Kepala Desa Mata Iwoi">
+          </div>
+          <div class="photo-shine"></div>
+          <div class="photo-badge">KADES MATA IWOI</div>
+        </div>
+
+        <div class="profile-info">
+          <h2 id="kadesName">H. ABDUL RAHMAN, S.Sos</h2>
+          <p class="kades-role">Kepala Desa Mata Iwoi</p>
+          <div class="kades-meta">
+            <div class="meta-row">
+              <span class="meta-label">Lahir</span>
+              <span class="meta-sep">·</span>
+              <span class="meta-val" id="kadesTtl">Unaaha, 12 Maret 1975</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Dilantik</span>
+              <span class="meta-sep">·</span>
+              <span class="meta-val" id="kadesDilantik">15 Januari 2023</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-divider"></div>
+
+      <!-- === PERANGKAT, LEMBAGA & TOKOH MASYARAKAT === -->
+      <div class="person-block">
+        <span class="profile-tag alt">PERANGKAT & TOKOH</span>
+
+        <div class="photo-frame people-frame">
+          <img class="photo-bg" id="peopleBg" alt="" aria-hidden="true" src="">
+          <div class="people-track" id="peopleTrack"></div>
+          <div class="photo-shine"></div>
+          <div class="photo-badge">PROFIL DESA</div>
+        </div>
+
+        <!-- INFO LENGKAP: tidak kosong -->
+        <div class="people-info" id="peopleInfo">
+
+          <!-- Chip kategori -->
+          <span class="people-chip" id="peopleChip">Perangkat Desa</span>
+
+          <!-- Nama & jabatan -->
+          <h3 class="people-name" id="peopleName">—</h3>
+          <p class="people-role" id="peopleRole">—</p>
+
+          <!-- Detail bidang/lembaga -->
+          <div class="people-detail">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 7h-4V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+              <path d="M9 13h6"/>
+            </svg>
+            <span id="peopleDetail">Bidang Pemerintahan</span>
+          </div>
+
+          <!-- Navigasi + counter -->
+          <div class="people-footer">
+            <button class="people-nav-btn" id="peoplePrev" aria-label="Sebelumnya">‹</button>
+            <span class="people-counter">
+              <span class="counter-current" id="peopleCurrent">1</span>
+              <span class="counter-sep">/</span>
+              <span class="counter-total" id="peopleTotal">6</span>
+            </span>
+            <button class="people-nav-btn" id="peopleNext" aria-label="Berikutnya">›</button>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ---------- KANAN: VISI + KONTEN ---------- -->
+    <section class="content">
+
+      <div class="visi-card">
+        <div class="visi-head">
+          <span class="visi-ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </span>
+          <h2>Visi</h2>
+          <span class="line"></span>
+        </div>
+
+        <p class="visi-text">
+          Terwujudnya Desa Mata Iwoi yang
+          <span class="hl">Maju</span>,
+          <span class="hl">Mandiri</span>,
+          <span class="hl">Sejahtera</span>, dan
+          <span class="hl">Berbudaya</span>,
+          melalui tata kelola pemerintahan yang bersih, transparan,
+          dan pelayanan publik yang prima.
+        </p>
+
+        <div class="visi-foot">Visi Pembangunan Desa 2000 – 2028</div>
+      </div>
+
+      <nav class="tabs" id="tabs">
+        <button class="tab active" data-tab="misi">Misi</button>
+        <button class="tab" data-tab="tujuan">Tujuan</button>
+        <button class="tab" data-tab="sasaran">Sasaran</button>
+        <div class="tab-progress"><span id="tabProgress"></span></div>
+      </nav>
+
+      <div class="panels">
+        <div class="panel active" data-panel="misi">
+          <ol class="misi-list">
+            <li class="misi-item"><span class="misi-num">01</span><span class="misi-text">Meningkatkan kualitas tata kelola pemerintahan desa yang transparan, akuntabel, dan partisipatif.</span></li>
+            <li class="misi-item"><span class="misi-num">02</span><span class="misi-text">Meningkatkan pembangunan infrastruktur dasar dan konektivitas antar dusun serta akses jalan produksi.</span></li>
+            <li class="misi-item"><span class="misi-num">03</span><span class="misi-text">Meningkatkan kualitas sumber daya manusia melalui pendidikan, kesehatan, dan pembinaan keagamaan.</span></li>
+            <li class="misi-item"><span class="misi-num">04</span><span class="misi-text">Mengembangkan ekonomi masyarakat berbasis pertanian, perkebunan, perikanan, dan UMKM.</span></li>
+            <li class="misi-item"><span class="misi-num">05</span><span class="misi-text">Melestarikan nilai budaya dan kearifan lokal serta menjaga kelestarian lingkungan hidup.</span></li>
+            <li class="misi-item"><span class="misi-num">06</span><span class="misi-text">Memperkuat kelembagaan masyarakat dan BUMDes sebagai penggerak ekonomi desa.</span></li>
+          </ol>
+        </div>
+
+        <div class="panel" data-panel="tujuan">
+          <div class="tujuan-grid">
+            <div class="tujuan-card"><div class="t-ico"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-5h6v5"/><path d="M9 12h.01M15 12h.01"/></svg></div><h3>Pelayanan Publik Prima</h3><p>Mewujudkan pelayanan administrasi desa yang cepat, mudah, transparan, dan bebas pungli.</p></div>
+            <div class="tujuan-card"><div class="t-ico"><svg viewBox="0 0 24 24"><path d="M4 21 10 3"/><path d="M20 21 14 3"/><path d="M12 7v3M12 14v3"/></svg></div><h3>Infrastruktur Merata</h3><p>Meningkatkan aksesibilitas jalan desa, jembatan, dan penyediaan air bersih bagi seluruh dusun.</p></div>
+            <div class="tujuan-card"><div class="t-ico"><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg></div><h3>SDM Berkualitas</h3><p>Meningkatkan derajat kesehatan, pendidikan, dan keagamaan masyarakat secara berkelanjutan.</p></div>
+            <div class="tujuan-card"><div class="t-ico"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v6h-6"/></svg></div><h3>Ekonomi Masyarakat</h3><p>Meningkatkan Pendapatan Asli Desa dan kesejahteraan keluarga melalui usaha produktif.</p></div>
+            <div class="tujuan-card"><div class="t-ico"><svg viewBox="0 0 24 24"><path d="M12 3c4 3 6 6 6 10a6 6 0 0 1-12 0c0-4 2-7 6-10z"/><path d="M12 21V11"/></svg></div><h3>Lingkungan Lestari</h3><p>Mewujudkan lingkungan desa yang bersih, sehat, dan lestari berbasis kearifan lokal.</p></div>
+            <div class="tujuan-card"><div class="t-ico"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Kelembagaan Kuat</h3><p>Memperkuat BUMDes, LPM, PKK, dan lembaga kemasyarakatan sebagai mitra pembangunan desa.</p></div>
+          </div>
+        </div>
+
+        <div class="panel" data-panel="sasaran">
+          <div class="sasaran-grid" id="sasaranGrid"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ticker">
+    <div class="ticker-track" id="tickerTrack"></div>
+  </footer>
+
+<script>
+/* =========================================================
+   1. DATA KEPALA DESA
+   ========================================================= */
+const KADES = {
+  nama:     "H. ABDUL RAHMAN, S.Sos",
+  ttl:      "Unaaha, 12 Maret 1975",
+  dilantik: "15 Januari 2023",
+  foto: [
+    "foto-kades-1.jpg",
+    "foto-kades-2.jpg",
+    "foto-kades-3.jpg",
+    "foto-kades-4.jpg"
+  ]
+};
+
+const PHOTOS = (Array.isArray(KADES.foto) ? KADES.foto : [KADES.foto])
+  .filter((x) => typeof x === "string" && x.trim())
+  .slice(0, 4);
+
+const PHOTO_INTERVAL = 5000;
+
+/* =========================================================
+   2. DATA PERANGKAT, LEMBAGA & TOKOH MASYARAKAT
+   kategori: "Perangkat Desa" | "Lembaga Desa" | "Tokoh Masyarakat"
+   info:     bidang / nama lembaga / wilayah tokoh
+   ========================================================= */
+const PERANGKAT = [
+  {
+    foto: "perangkat-1.jpg",
+    nama: "MUHAMMAD YUSUF, S.E",
+    jabatan: "Sekretaris Desa",
+    kategori: "Perangkat Desa",
+    info: "Bidang Pemerintahan"
+  },
+  {
+    foto: "perangkat-2.jpg",
+    nama: "SITI RAHMAWATI, A.Md",
+    jabatan: "Kaur Keuangan",
+    kategori: "Perangkat Desa",
+    info: "Bidang Keuangan & Aset"
+  },
+  {
+    foto: "perangkat-3.jpg",
+    nama: "ANDI PRATAMA, S.Kom",
+    jabatan: "Kaur Perencanaan",
+    kategori: "Perangkat Desa",
+    info: "Bidang Perencanaan"
+  },
+  {
+    foto: "perangkat-4.jpg",
+    nama: "H. LA ODE HASAN",
+    jabatan: "Ketua BPD",
+    kategori: "Lembaga Desa",
+    info: "Badan Permusyawaratan Desa"
+  },
+  {
+    foto: "perangkat-5.jpg",
+    nama: "IR. BUDI SANTOSO",
+    jabatan: "Ketua LPM",
+    kategori: "Lembaga Desa",
+    info: "Lembaga Pemberdayaan Masyarakat"
+  },
+  {
+    foto: "perangkat-6.jpg",
+    nama: "H. ABDUL KADIR",
+    jabatan: "Tokoh Masyarakat",
+    kategori: "Tokoh Masyarakat",
+    info: "Tokoh Agama · Dusun II"
+  }
+];
+
+const PEOPLE_INTERVAL = 4500;
+
+/* =========================================================
+   3. IKON & DATA SASARAN PER BIDANG
+   ========================================================= */
+const ICON = {
+  gov:    `<svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-5h6v5"/><path d="M9 12h.01M15 12h.01"/></svg>`,
+  road:   `<svg viewBox="0 0 24 24"><path d="M4 21 10 3"/><path d="M20 21 14 3"/><path d="M12 7v3M12 14v3"/></svg>`,
+  health: `<svg viewBox="0 0 24 24"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21l8.8-8.3a5 5 0 0 0 0-7.1z"/></svg>`,
+  edu:    `<svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>`,
+  econ:   `<svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v6h-6"/></svg>`,
+  social: `<svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`
+};
+
+const SASARAN_BIDANG = [
+  { bidang:"Pemerintahan Desa", color:"#2fd08a", icon:ICON.gov, items:[
+    { nama:"Pelayanan administrasi tepat waktu",        target:"100%", nilai:100 },
+    { nama:"Tingkat kehadiran aparatur desa",           target:"95%",  nilai:95 },
+    { nama:"Laporan & dokumen perencanaan tepat waktu", target:"100%", nilai:100 }
+  ]},
+  { bidang:"Infrastruktur & Lingkungan", color:"#38bdf8", icon:ICON.road, items:[
+    { nama:"Jalan desa & antar dusun layak",         target:"100%", nilai:100 },
+    { nama:"Rumah tangga dengan akses air bersih",   target:"85%",  nilai:85 },
+    { nama:"Drainase & sanitasi lingkungan tertata", target:"70%",  nilai:70 }
+  ]},
+  { bidang:"Kesehatan", color:"#fb7185", icon:ICON.health, items:[
+    { nama:"Penurunan angka stunting balita",          target:"10%", nilai:10 },
+    { nama:"Ibu hamil periksa kehamilan rutin",        target:"95%", nilai:95 },
+    { nama:"Kepesertaan jaminan kesehatan masyarakat", target:"90%", nilai:90 }
+  ]},
+  { bidang:"Pendidikan", color:"#f0c060", icon:ICON.edu, items:[
+    { nama:"Angka partisipasi sekolah dasar",    target:"100%", nilai:100 },
+    { nama:"Anak putus sekolah tertangani",      target:"100%", nilai:100 },
+    { nama:"Lembaga PAUD aktif di setiap dusun", target:"80%",  nilai:80 }
+  ]},
+  { bidang:"Ekonomi & Pemberdayaan", color:"#a78bfa", icon:ICON.econ, items:[
+    { nama:"Pertumbuhan Pendapatan Asli Desa (PADes)", target:"10%",    nilai:70 },
+    { nama:"Unit usaha BUMDes aktif & produktif",      target:"3 Unit", nilai:60 },
+    { nama:"Kelompok tani & UMKM terfasilitasi",       target:"12",     nilai:75 }
+  ]},
+  { bidang:"Sosial Budaya & Keagamaan", color:"#22d3ee", icon:ICON.social, items:[
+    { nama:"Kegiatan keagamaan & adat terjadwal",       target:"100%", nilai:100 },
+    { nama:"Kelompok PKK & karang taruna aktif",        target:"6",    nilai:85 },
+    { nama:"Fasilitas ibadah & balai adat terpelihara", target:"90%",  nilai:90 }
+  ]}
+];
+
+/* =========================================================
+   4. UTIL
+   ========================================================= */
+const $ = (id) => document.getElementById(id);
+
+const FALLBACK_AVATAR = `
+  <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="pfGrad2" x1="0" y1="0" x2=".6" y2="1">
+        <stop offset="0" stop-color="#12402f"/>
+        <stop offset="1" stop-color="#061a14"/>
+      </linearGradient>
+      <radialGradient id="pfGlow2" cx="50%" cy="30%" r="58%">
+        <stop offset="0" stop-color="#29b6d8" stop-opacity=".38"/>
+        <stop offset="1" stop-color="#29b6d8" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="400" height="500" fill="url(#pfGrad2)"/>
+    <rect width="400" height="500" fill="url(#pfGlow2)"/>
+    <circle cx="200" cy="182" r="76" fill="#2a6350" opacity=".88"/>
+    <path d="M50 500c0-92 67-152 150-152s150 60 150 152z" fill="#2a6350" opacity=".88"/>
+  </svg>
+`;
+
+/* =========================================================
+   5. FOTO KADES — ROTASI MULTI FOTO
+   ========================================================= */
+const LAYERS = [$("photoLayerA"), $("photoLayerB")];
+const BG     = $("kadesPhotoBg");
+const FALLBK = $("photoFallback");
+
+let activeLayerIdx = 0;
+let photoIdx       = 0;
+let photoTimer     = null;
+
+function swapPhoto(idx) {
+  const url  = PHOTOS[idx];
+  const next = LAYERS[1 - activeLayerIdx];
+  const prev = LAYERS[activeLayerIdx];
+
+  BG.src = url;
+  BG.classList.add("loaded");
+
+  const pre = new Image();
+  pre.onload = () => {
+    if (next.getAttribute("src") !== url) next.src = url;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      next.classList.add("active");
+      prev.classList.remove("active");
+      activeLayerIdx = 1 - activeLayerIdx;
+    }));
+  };
+  pre.src = url;
+}
+
+function showFirstPhoto() {
+  const url = PHOTOS[0];
+  const layer = LAYERS[1 - activeLayerIdx];
+
+  BG.src = url;
+  BG.classList.add("loaded");
+
+  const reveal = () => {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      layer.classList.add("active");
+      activeLayerIdx = 1 - activeLayerIdx;
+      FALLBK.style.display = "none";
+    }));
+  };
+  layer.onload = reveal;
+  layer.src = url;
+  if (layer.complete && layer.naturalWidth > 0) reveal();
+}
+
+function startPhotoTimer() {
+  if (PHOTOS.length <= 1) return;
+  clearInterval(photoTimer);
+  photoTimer = setInterval(() => {
+    photoIdx = (photoIdx + 1) % PHOTOS.length;
+    swapPhoto(photoIdx);
+  }, PHOTO_INTERVAL);
+}
+
+function initKadesPhotos() {
+  if (PHOTOS.length === 0) {
+    FALLBK.style.display = "grid";
+    return;
+  }
+  showFirstPhoto();
+  PHOTOS.slice(1).forEach((u) => { new Image().src = u; });
+  startPhotoTimer();
+}
+
+/* =========================================================
+   6. PERANGKAT — SLIDE + INFO LENGKAP
+   ========================================================= */
+const peopleTrack   = $("peopleTrack");
+const peopleBg      = $("peopleBg");
+const peopleChip    = $("peopleChip");
+const peopleName    = $("peopleName");
+const peopleRole    = $("peopleRole");
+const peopleDetail  = $("peopleDetail");
+const peopleCurrent = $("peopleCurrent");
+const peopleTotal   = $("peopleTotal");
+const peoplePrev    = $("peoplePrev");
+const peopleNext    = $("peopleNext");
+const peopleInfo    = $("peopleInfo");
+
+let peopleIdx   = 0;
+let peopleTimer = null;
+
+function buildPeopleSlides() {
+  peopleTrack.innerHTML = PERANGKAT.map((p) => `
+    <div class="people-slide">
+      <div class="photo-fallback">${FALLBACK_AVATAR}</div>
+      <img src="${p.foto || ''}" alt="${p.nama}"
+           onerror="this.style.display='none'">
+    </div>
+  `).join("");
+}
+
+function chipClassFor(kategori) {
+  if (kategori === "Lembaga Desa") return "people-chip lembaga";
+  if (kategori === "Tokoh Masyarakat") return "people-chip tokoh";
+  return "people-chip";
+}
+
+function updatePeopleInfo(person, instant = false) {
+  const apply = () => {
+    peopleChip.className   = chipClassFor(person.kategori);
+    peopleChip.textContent = person.kategori || "Profil";
+    peopleName.textContent = person.nama    || "—";
+    peopleRole.textContent = person.jabatan || "—";
+    peopleDetail.textContent = person.info  || "Desa Mata Iwoi";
+    peopleCurrent.textContent = peopleIdx + 1;
+    peopleTotal.textContent   = PERANGKAT.length;
+  };
+
+  if (instant) { apply(); return; }
+
+  peopleInfo.style.opacity   = "0";
+  peopleInfo.style.transform = "translateY(8px)";
+  setTimeout(() => {
+    apply();
+    peopleInfo.style.opacity   = "1";
+    peopleInfo.style.transform = "none";
+  }, 350);
+}
+
+function gotoPerson(idx, instant = false) {
+  peopleIdx = idx;
+  const person = PERANGKAT[idx];
+
+  /* Geser track */
+  if (!instant) {
+    peopleTrack.style.transform = `translateX(-${idx * 100}%)`;
+  } else {
+    peopleTrack.style.transition = "none";
+    peopleTrack.style.transform  = `translateX(-${idx * 100}%)`;
+    requestAnimationFrame(() => { peopleTrack.style.transition = ""; });
+  }
+
+  /* Latar blur */
+  peopleBg.src = person.foto || "";
+  if (person.foto) peopleBg.classList.add("loaded");
+  else peopleBg.classList.remove("loaded");
+
+  /* Info */
+  updatePeopleInfo(person, instant);
+}
+
+function startPeopleTimer() {
+  if (PERANGKAT.length <= 1) {
+    peoplePrev.disabled = true;
+    peopleNext.disabled = true;
+    return;
+  }
+  clearInterval(peopleTimer);
+  peopleTimer = setInterval(() => {
+    gotoPerson((peopleIdx + 1) % PERANGKAT.length);
+  }, PEOPLE_INTERVAL);
+}
+function resetPeopleTimer() { startPeopleTimer(); }
+
+function initPeople() {
+  if (!PERANGKAT.length) {
+    peopleName.textContent = "—";
+    peopleRole.textContent = "—";
+    peopleDetail.textContent = "—";
+    peoplePrev.disabled = true;
+    peopleNext.disabled = true;
+    return;
+  }
+
+  buildPeopleSlides();
+  gotoPerson(0, true);
+
+  PERANGKAT.slice(1).forEach((p) => {
+    if (p.foto) new Image().src = p.foto;
+  });
+
+  if (PERANGKAT.length <= 1) {
+    peoplePrev.disabled = true;
+    peopleNext.disabled = true;
+  }
+
+  startPeopleTimer();
+}
+
+/* Navigasi manual */
+peoplePrev.addEventListener("click", () => {
+  if (PERANGKAT.length <= 1) return;
+  gotoPerson((peopleIdx - 1 + PERANGKAT.length) % PERANGKAT.length);
+  resetPeopleTimer();
+});
+peopleNext.addEventListener("click", () => {
+  if (PERANGKAT.length <= 1) return;
+  gotoPerson((peopleIdx + 1) % PERANGKAT.length);
+  resetPeopleTimer();
+});
+
+/* =========================================================
+   7. RENDER PROFIL & SASARAN
+   ========================================================= */
+function renderProfil() {
+  $("kadesName").textContent     = KADES.nama;
+  $("kadesTtl").textContent      = KADES.ttl;
+  $("kadesDilantik").textContent = KADES.dilantik;
+}
+
+function renderSasaran() {
+  $("sasaranGrid").innerHTML = SASARAN_BIDANG.map((b) => `
+    <article class="bidang-card" style="--acc:${b.color}">
+      <header class="bidang-head">
+        <span class="bidang-ico">${b.icon}</span>
+        <div class="bidang-meta">
+          <h3 title="${b.bidang}">${b.bidang}</h3>
+          <span class="bidang-sub">${b.items.length} sasaran</span>
+        </div>
+      </header>
+      <ul class="bidang-list">
+        ${b.items.map((it) => `
+          <li>
+            <div class="b-top">
+              <span class="b-name">${it.nama}</span>
+              <span class="b-val">${it.target}</span>
+            </div>
+            <div class="b-track"><span class="b-fill" data-w="${it.nilai}"></span></div>
+          </li>
+        `).join("")}
+      </ul>
+    </article>
+  `).join("");
+}
+
+/* =========================================================
+   8. TAB — ANIMASI BERURUT + AUTO PINDAH
+   ========================================================= */
+const TAB_THEMES = {
+  misi:    { c1:"#38bdf8", c2:"#6366f1" },
+  tujuan:  { c1:"#f0c060", c2:"#f59e0b" },
+  sasaran: { c1:"#a78bfa", c2:"#8b5cf6" }
+};
+
+const TAB_CONFIG = {
+  misi:    { selector: ".misi-item",   stagger: 600, hold: 1800 },
+  tujuan:  { selector: ".tujuan-card", stagger: 600, hold: 1800 },
+  sasaran: { selector: ".bidang-card", stagger: 650, hold: 2200 }
+};
+
+const TABS = ["misi", "tujuan", "sasaran"];
+
+let activeTab   = "misi";
+let cardTimers  = [];
+let rotateTimer = null;
+
+const progress = $("tabProgress");
+const flash    = $("flash");
+
+function clearCardTimers() { cardTimers.forEach(clearTimeout); cardTimers = []; }
+function clearRotateTimer() { if (rotateTimer) { clearTimeout(rotateTimer); rotateTimer = null; } }
+
+function getTabDuration(name) {
+  const cfg   = TAB_CONFIG[name];
+  const panel = document.querySelector(`.panel[data-panel="${name}"]`);
+  const n     = panel.querySelectorAll(cfg.selector).length;
+  return (n - 1) * cfg.stagger + 120 + 500 + cfg.hold;
+}
+
+function resetCards(panel, selector) {
+  const cards = panel.querySelectorAll(selector);
+  cards.forEach((c) => {
+    c.style.transition = "none";
+    c.classList.remove("visible");
+    c.querySelectorAll(".b-fill").forEach((b) => {
+      b.style.transition = "none"; b.style.width = "0%";
+    });
+  });
+  void panel.offsetHeight;
+  cards.forEach((c) => {
+    c.style.transition = "";
+    c.querySelectorAll(".b-fill").forEach((b) => { b.style.transition = ""; });
+  });
+}
+
+function pulseFlash() {
+  flash.classList.remove("on");
+  void flash.offsetWidth;
+  flash.classList.add("on");
+}
+
+function setTab(name) {
+  activeTab = name;
+  clearCardTimers();
+  clearRotateTimer();
+
+  const t = TAB_THEMES[name];
+  document.documentElement.style.setProperty("--sec",   t.c1);
+  document.documentElement.style.setProperty("--sec-2", t.c2);
+
+  document.querySelectorAll(".tab").forEach((b) => {
+    b.classList.toggle("active", b.dataset.tab === name);
+  });
+  document.querySelectorAll(".panel").forEach((p) => {
+    p.classList.toggle("active", p.dataset.panel === name);
+  });
+
+  const cfg   = TAB_CONFIG[name];
+  const panel = document.querySelector(`.panel[data-panel="${name}"]`);
+  resetCards(panel, cfg.selector);
+  const cards = panel.querySelectorAll(cfg.selector);
+
+  cards.forEach((card, i) => {
+    cardTimers.push(setTimeout(() => {
+      card.classList.add("visible");
+      if (name === "sasaran") {
+        setTimeout(() => {
+          card.querySelectorAll(".b-fill").forEach((bar) => {
+            bar.style.width = (bar.dataset.w || "0") + "%";
+          });
+        }, 160);
+      }
+    }, i * cfg.stagger + 120));
+  });
+
+  const duration = getTabDuration(name);
+  progress.style.animation = "none";
+  void progress.offsetWidth;
+  progress.style.animation = "grow " + (duration / 1000) + "s linear forwards";
+  rotateTimer = setTimeout(nextTab, duration);
+
+  pulseFlash();
+}
+
+function nextTab() {
+  const i = TABS.indexOf(activeTab);
+  setTab(TABS[(i + 1) % TABS.length]);
+}
+
+document.querySelectorAll(".tab").forEach((btn) => {
+  btn.addEventListener("click", () => setTab(btn.dataset.tab));
+});
+
+/* =========================================================
+   9. FULLSCREEN
+   ========================================================= */
+const fsBtn = $("fsBtn");
+function isFullscreen() {
+  return !!(document.fullscreenElement || document.webkitFullscreenElement);
+}
+function toggleFullscreen() {
+  const el = document.documentElement;
+  if (!isFullscreen()) {
+    const req = el.requestFullscreen || el.webkitRequestFullscreen;
+    if (req) { const p = req.call(el); if (p && p.catch) p.catch(() => {}); }
+  } else {
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if (exit) { const p = exit.call(document); if (p && p.catch) p.catch(() => {}); }
+  }
+}
+function updateFsBtn() {
+  fsBtn.classList.toggle("active", isFullscreen());
+  fsBtn.title = isFullscreen() ? "Keluar Layar Penuh (F)" : "Layar Penuh (F)";
+}
+fsBtn.addEventListener("click", toggleFullscreen);
+document.addEventListener("fullscreenchange", updateFsBtn);
+document.addEventListener("webkitfullscreenchange", updateFsBtn);
+
+/* =========================================================
+   10. KEYBOARD
+   ========================================================= */
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") { e.preventDefault(); nextTab(); }
+  if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    const i = TABS.indexOf(activeTab);
+    setTab(TABS[(i - 1 + TABS.length) % TABS.length]);
+  }
+  if (e.key === "f" || e.key === "F") { e.preventDefault(); toggleFullscreen(); }
+  const n = parseInt(e.key, 10);
+  if (n >= 1 && n <= 3) { e.preventDefault(); setTab(TABS[n - 1]); }
+});
+
+/* =========================================================
+   11. JAM & TANGGAL
+   ========================================================= */
+const HARI  = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+const BULAN = ["Januari","Februari","Maret","April","Mei","Juni",
+               "Juli","Agustus","September","Oktober","November","Desember"];
+
+function tickClock() {
+  const now = new Date();
+  const p2  = (n) => String(n).padStart(2,"0");
+  $("clock").textContent =
+    p2(now.getHours()) + ":" + p2(now.getMinutes()) + ":" + p2(now.getSeconds());
+  $("date").textContent =
+    HARI[now.getDay()] + ", " + now.getDate() + " " +
+    BULAN[now.getMonth()] + " " + now.getFullYear();
+}
+
+/* =========================================================
+   12. TICKER
+   ========================================================= */
+function buildTicker() {
+  const text =
+    "<span>📘 <b>RPJMDesa Desa Mata Iwoi 2000 – 2028</b>" +
+    " &nbsp;·&nbsp; Kecamatan Amonggedo, Kabupaten Konawe, Sulawesi Tenggara" +
+    " &nbsp;·&nbsp; <b>Visi:</b> Maju · Mandiri · Sejahtera · Berbudaya" +
+    " &nbsp;·&nbsp; <b>6 Misi</b> · <b>6 Tujuan</b> · <b>6 Bidang Sasaran</b>" +
+    " &nbsp;|&nbsp; Tekan <b>←</b> <b>→</b> untuk berpindah bagian, <b>1–3</b> pilih langsung, " +
+    "<b>F</b> untuk layar penuh" +
+    " &nbsp;|&nbsp; <i>*data bersifat contoh/template</i></span>";
+  $("tickerTrack").innerHTML = text + text;
+}
+
+/* =========================================================
+   13. INIT
+   ========================================================= */
+renderProfil();
+renderSasaran();
+buildTicker();
+tickClock();
+setInterval(tickClock, 1000);
+initKadesPhotos();
+initPeople();
+setTab("misi");
+</script>
+</body>
+</html>
